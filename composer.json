@@ -1,0 +1,21 @@
+{
+    "name": "grace/gracepack",
+    "description": "dev",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "shampeak",
+            "email": "shampeak@sina.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php" : ">=5.5.9"
+    },
+    "autoload":{
+        "psr-4":{
+            "Grace\\": "src"
+        }
+    }
+}
