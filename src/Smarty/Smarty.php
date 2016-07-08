@@ -15,7 +15,6 @@ class Smarty {
     public function __construct($config = array()){
         $this->_config = $config;
         //建立对象
-        require $config['smartyFile'];
         $this->_sty = new \Smarty;
         $this->_sty->setTemplateDir($config['TemplateDir']);
         $this->_sty->setCompileDir($config['CompileDir']);  //编译
