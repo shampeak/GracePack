@@ -9,7 +9,7 @@ ini_set('error_reporting', $error_reporting);
 
 
 
-echo 'Hello Grace';
+echo 'Hello Grace\Db\Db';
 
 
 $config = [
