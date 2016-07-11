@@ -36,6 +36,7 @@ class Mmcfile{ // class start
 
     public function set($key = 'default',$value = array())
     {
+<<<<<<< HEAD
 
         $count = func_num_args();
         if($count == 1){
@@ -43,6 +44,14 @@ class Mmcfile{ // class start
             $key    = 'default';
         }
 
+=======
+        $count = func_num_args();
+        if($count = 1){
+            $value  = $key;
+            $key    = 'default';
+        }
+
+>>>>>>> origin/master
         $this->nr[$key] = $value;
         $this->save($key);
     }
