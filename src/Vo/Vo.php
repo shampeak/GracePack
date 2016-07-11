@@ -57,12 +57,16 @@ class Vo extends Set
     */
     public function make($abstract,$parameters=[])
     {
+
         $abstract = ucfirst($abstract);
         if (isset($this->instances[$abstract])) {
               return $this->instances[$abstract];
         }
-        //未定义的服务类 返回空值;
+
+        //未定义的服务类 报错;
         if (!isset($this->Providers[$abstract])) {
+            //报错
+            die("miss class : $abstract");
               return null;
         }
         // echo $abstract;
