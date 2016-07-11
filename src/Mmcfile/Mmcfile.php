@@ -1,7 +1,20 @@
 <?php
 
 namespace Grace\Mmcfile;
-
+/**
+ * Class Mmcfile
+ * @package Grace\Mmcfile
+ * 接口
+ *
+ * app('mmcfile')->set("a",[1,2,3,4]);
+ * app('mmcfile')->get("a");
+ *
+ * app('mmcfile')->set([1,2,3,4]);      //默认default
+ * app('mmcfile')->get();               //默认default
+ *
+ *
+ *
+ */
 
 class Mmcfile{ // class start
 
@@ -15,58 +28,48 @@ class Mmcfile{ // class start
         $this->_root        = $config['root'];
     }
 
-    public function file($filename = '')
+    public function get($key = 'default')
     {
-        $this->_jsonFile = $this->_root.$filename;
-        return $this;
+        $this->read($key);
+        return $this->_nr[$key];
     }
 
-
-
-    public function get($key = '')
+    public function set($key = 'default',$value = array())
     {
-        $this->read();
-        if($key){
-            return $this->_nr[$this->_jsonFile][$key];
-        }else{
-            return $this->_nr[$this->_jsonFile];
+        $count = func_num_args();
+        if($count = 1){
+            $value  = $key;
+            $key    = 'default';
         }
-    }
 
-    public function set($value = array(),$key = '')
-    {
-        $this->read();
-        if($key){
-            $this->nr[$this->_jsonFile]['key'] = $value;
-        }else{
-            $this->nr[$this->_jsonFile] = $value;
-        }
-        $this->save();
+        $this->nr[$key] = $value;
+        $this->save($key);
     }
 
     //===========================================
 
-    private function read()
+    private function read($key)
     {
-        if(empty($this->_nr[$this->_jsonFile])) {
-            if (file_exists($this->_jsonFile)) {
-                $_ar = @file_get_contents($this->_jsonFile);
+        $_jsonFile = $this->_root.$key.'.json';
+        if(empty($this->_nr[$key])) {
+            if (file_exists($_jsonFile)) {
+                $_ar = @file_get_contents($_jsonFile);
                 $ar = json_decode($_ar,true);
             } else {
                 $ar = array();
             }
-            $this->_nr[$this->_jsonFile] = $ar;
+            $this->_nr[$key] = $ar;
         }
-
         return $this;
     }
 
-    private function save()
+    private function save($key)
     {
         if(!is_dir($this->_root)){            //路径不存在
             die("mmcfile 存储路径不存在");
         }
-        @file_put_contents($this->_jsonFile,json_encode($this->nr[$this->_jsonFile]));
+        $_jsonFile = $this->_root.$key.'.json';
+        @file_put_contents($_jsonFile,json_encode($this->nr[$key]));
     }
 
 }
