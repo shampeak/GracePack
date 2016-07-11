@@ -26,26 +26,33 @@ class Simulation extends Base
         $rec['class']    = current($tree)['class'];
         //OK,获得调用数据
 
-        //存储到mmcfile里面
-        $lib = app('mmcfile')->get('Simulation.index');
+        $rec['hash']    = md5(serialize($rec));             //对自身进行hash
+
+        //=================================================
+        $mmcname = 'Simulation.index';
+        /**
+         * 存储
+         * - 判断重复
+         */
+        $lib = app('mmcfile')->get($mmcname);             //存储到mmcfile里面
         $lib = empty($lib)?array():$lib;
-
-        $type = $lib[$modelname]['type'];
-        $info = $lib[$modelname]['info'];
-
-        //检查是否已经被记录
+        //判断是否重复
         $record = true;
-
-        $lib[$model]['info'] = $rec;
-
-        $record = true;         //根据检查结果重置标记
-
-        if($record){
-            //记录
-        }else{
-            //不用记录
+        if(!empty($lib)){
+            foreach($lib as $k=>$v){
+                $hash = md5(serialize([
+                    'file'      => $v['file'],
+                    'line'      => $v['line'],
+                    '_function' => $v['_function'],
+                    'function'  => $v['function'],
+                    'class'     => $v['class']
+                ]));
+                if($hash == $v['hash']) $record = false;        //发现数据,不要记录
+            }
         }
-
+        //重复性判断结束
+        //=================================================
+        if($record) app('mmcfile')->set($mmcname,$rec);//记录
     }
 
     public function test($modelname = ''){
