@@ -37,6 +37,7 @@ class Simulation extends Base
         $lib = app('mmcfile')->get($mmcname);             //存储到mmcfile里面
         $lib = empty($lib)?array():$lib;
         //判断是否重复
+        D($lib);
         $record = true;
         if(!empty($lib)){
             foreach($lib as $k=>$v){
@@ -52,7 +53,10 @@ class Simulation extends Base
         }
         //重复性判断结束
         //=================================================
-        if($record) app('mmcfile')->set($mmcname,$rec);//记录
+        if($record){
+            $rc[] = $rec;
+            app('mmcfile')->set($mmcname,$rc);//记录
+        }
     }
 
     public function test($modelname = ''){
